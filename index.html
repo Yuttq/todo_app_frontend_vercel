@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>My To-Do List</h1>
+            <button id="toggle-dark-mode" class="toggle-dark-mode" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <div class="todo-container">
+            <div class="input-group">
+                <div class="task-input-wrapper">
+                    <input type="text" id="task-input" placeholder="Add a new task..." maxlength="100" aria-label="Task input">
+                    <textarea id="task-description" placeholder="Task description..." maxlength="200" aria-label="Task description"></textarea>
+                    <div class="char-counter" id="char-counter">200/200</div>
+                </div>
+                <div class="task-meta">
+                    <input type="date" id="due-date" aria-label="Due date">
+                    <select id="task-priority" aria-label="Task priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <input type="text" id="task-tags" placeholder="Tags (comma-separated)" aria-label="Task tags">
+                </div>
+                <button id="add-task-btn" class="primary-btn">Add</button>
+            </div>
+
+            <div class="controls">
+                <div class="filter-buttons">
+                    <button data-filter="all" class="filter-btn active">All</button>
+                    <button data-filter="pending" class="filter-btn">Pending</button>
+                    <button data-filter="completed" class="filter-btn">Completed</button>
+                </div>
+                <div class="sort-group">
+                    <label for="sort-tasks" class="sr-only">Sort tasks</label>
+                    <select id="sort-tasks" aria-label="Sort tasks">
+                        <option value="due-date">Due Date</option>
+                        <option value="created-date">Created Date</option>
+                        <option value="alphabetical">Alphabetical</option>
+                        <option value="priority">Priority</option>
+                    </select>
+                </div>
+                <button id="clear-tasks-btn" class="danger-btn" aria-label="Clear all tasks">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+
+            <div class="task-progress">
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <div class="loading-spinner" id="loading-spinner">Loading...</div>
+            <div class="empty-state" id="empty-state">
+                <i class="fas fa-tasks"></i>
+                <p>No tasks yet. Add one to get started!</p>
+            </div>
+
+            <ul id="task-list" role="list"></ul>
+            <div class="task-counter" id="task-count">0/0 tasks</div>
+        </div>
+
+        <div class="modal hidden" id="edit-modal">
+            <div class="modal-content">
+                <h2>Edit Task</h2>
+                <form id="edit-task-form">
+                    <label for="edit-task-text">Task</label>
+                    <input type="text" id="edit-task-text" maxlength="100" aria-label="Edit task name">
+                    <label for="edit-task-description">Details</label>
+                    <textarea id="edit-task-description" maxlength="200" aria-label="Edit task description"></textarea>
+                    <label for="edit-task-due-date">Due Date</label>
+                    <input type="date" id="edit-task-due-date" aria-label="Edit due date">
+                    <label for="edit-task-priority">Priority</label>
+                    <select id="edit-task-priority" aria-label="Edit task priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <label for="edit-task-tags">Tags (comma-separated)</label>
+                    <input type="text" id="edit-task-tags" aria-label="Edit task tags">
+                    <div class="modal-actions">
+                        <button type="submit" class="primary-btn">Save</button>
+                        <button type="button" id="cancel-edit-btn" class="secondary-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
