@@ -29,8 +29,32 @@ class TodoApp {
 
         this.currentFilter = 'all';
         this.currentSort = 'due-date';
-        this.priorityOrder = { high: 1, medium: 2, low: 3 };
+        this.priorityOrder = { 
+            critical: 1, 
+            urgent: 2, 
+            high: 3, 
+            medium: 4, 
+            low: 5, 
+            lowest: 6 
+        };
+        this.priorityIcons = {
+            critical: '<i class="fas fa-exclamation-triangle"></i>',
+            urgent: '<i class="fas fa-exclamation-circle"></i>',
+            high: '<i class="fas fa-arrow-circle-up"></i>',
+            medium: '<i class="fas fa-minus-circle"></i>',
+            low: '<i class="fas fa-arrow-circle-down"></i>',
+            lowest: '<i class="fas fa-circle"></i>'
+        };
         this.currentEditTaskId = null;
+        this.shortcuts = {
+            'n': () => this.elements.taskInput.focus(), // New task
+            'f': () => this.elements.filterButtons[0].click(), // All tasks
+            'p': () => this.elements.filterButtons[1].click(), // Pending tasks
+            'c': () => this.elements.filterButtons[2].click(), // Completed tasks
+            'd': () => this.toggleDarkMode(), // Toggle dark mode
+            'h': () => this.toggleShortcutsHelp(), // Show help
+        };
+        this.categories = ['Work', 'Personal', 'Shopping', 'Health', 'Important'];
         this.init();
     }
 
@@ -99,6 +123,15 @@ class TodoApp {
 
         this.elements.cancelEditBtn.addEventListener('click', () => {
             this.closeEditModal();
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.key in this.shortcuts) {
+                e.preventDefault();
+                this.shortcuts[e.key]();
+            }
         });
     }
 
@@ -260,11 +293,8 @@ class TodoApp {
         const prioritySpan = document.createElement('span');
         prioritySpan.className = `priority-indicator priority-${task.priority}`;
         prioritySpan.setAttribute('aria-label', `${task.priority} priority`);
-        prioritySpan.innerHTML = {
-            high: '<i class="fas fa-exclamation-circle"></i>',
-            medium: '<i class="fas fa-circle"></i>',
-            low: '<i class="fas fa-circle-notch"></i>'
-        }[task.priority];
+        prioritySpan.setAttribute('title', `${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority`);
+        prioritySpan.innerHTML = this.priorityIcons[task.priority];
 
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'task-actions';
@@ -567,6 +597,30 @@ class TodoApp {
     formatDate(dateString) {
         const options = { month: 'short', day: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
+    toggleShortcutsHelp() {
+        const helpModal = document.createElement('div');
+        helpModal.className = 'modal';
+        helpModal.innerHTML = `
+            <div class="modal-content">
+                <h2>Keyboard Shortcuts</h2>
+                <div class="shortcuts-list">
+                    <div><kbd>N</kbd> New task</div>
+                    <div><kbd>F</kbd> Show all tasks</div>
+                    <div><kbd>P</kbd> Show pending tasks</div>
+                    <div><kbd>C</kbd> Show completed tasks</div>
+                    <div><kbd>D</kbd> Toggle dark mode</div>
+                    <div><kbd>H</kbd> Show this help</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="primary-btn">Close</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(helpModal);
+        const closeBtn = helpModal.querySelector('button');
+        closeBtn.addEventListener('click', () => helpModal.remove());
     }
 }
 
