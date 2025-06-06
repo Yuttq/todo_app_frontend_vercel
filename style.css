@@ -889,6 +889,17 @@ input[type="checkbox"]:focus {
     display: none;
 }
 
+.tags-filter .empty-state {
+    padding: 8px;
+    text-align: center;
+    color: var(--completed-color);
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
 .toast {
     position: fixed;
     bottom: 16px;

@@ -134,9 +134,7 @@ class TodoApp {
         this.elements.filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 this.currentFilter = button.dataset.filter;
-                this.currentTagFilter = 'all';
                 this.updateFilterButtons();
-                this.updateTagFilter();
                 this.filterTasks();
             });
         });
@@ -144,8 +142,6 @@ class TodoApp {
         this.elements.tagsFilter.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag-btn')) {
                 this.currentTagFilter = e.target.dataset.tag;
-                this.currentFilter = 'all';
-                this.updateFilterButtons();
                 this.updateTagFilter();
                 this.filterTasks();
             }
@@ -222,13 +218,14 @@ class TodoApp {
         try {
             const savedState = localStorage.getItem('tagsFilterVisible');
             this.tagsFilterVisible = savedState !== null ? JSON.parse(savedState) : true;
-            this.elements.tagsFilter.classList.toggle('hidden', !this.tagsFilterVisible);
-            this.elements.toggleTagsFilter.innerHTML = `<i class="fas ${this.tagsFilterVisible ? 'fa-eye' : 'fa-eye-slash'}"></i> Tags`;
-            this.elements.toggleTagsFilter.setAttribute('aria-label', `${this.tagsFilterVisible ? 'Hide' : 'Show'} tags filter`);
         } catch (e) {
             console.error('Failed to load tags filter state:', e);
+            this.tagsFilterVisible = true;
             this.showToast('Error loading tags filter state');
         }
+        this.elements.tagsFilter.classList.toggle('hidden', !this.tagsFilterVisible);
+        this.elements.toggleTagsFilter.innerHTML = `<i class="fas ${this.tagsFilterVisible ? 'fa-eye' : 'fa-eye-slash'}"></i> Tags`;
+        this.elements.toggleTagsFilter.setAttribute('aria-label', `${this.tagsFilterVisible ? 'Hide' : 'Show'} tags filter`);
     }
 
     toggleMoreTags(taskId) {
@@ -352,20 +349,26 @@ class TodoApp {
     }
 
     updateTagFilter() {
+        console.log('Updating tag filter, visible:', this.tagsFilterVisible, 'currentTagFilter:', this.currentTagFilter);
         const tasks = this.getTasks();
         const uniqueTags = [...new Set(tasks.flatMap(task => task.tags))].filter(tag => tag);
-        this.elements.tagsFilter.innerHTML = `
-            <button class="filter-btn tag-btn${this.currentTagFilter === 'all' ? ' active' : ''}" data-tag="all">Show All</button>
-        `;
-        uniqueTags.forEach(tag => {
-            const tagBtn = document.createElement('button');
-            tagBtn.className = `filter-btn tag-btn${this.currentTagFilter === tag ? ' active' : ''}`;
-            tagBtn.dataset.tag = tag;
-            tagBtn.textContent = tag;
-            tagBtn.setAttribute('aria-label', `Filter by tag ${tag}`);
-            this.elements.tagsFilter.appendChild(tagBtn);
-        });
-        this.elements.tagsFilter.classList.toggle('hidden', uniqueTags.length === 0 && this.currentTagFilter === 'all' || !this.tagsFilterVisible);
+        this.elements.tagsFilter.innerHTML = '';
+        if (uniqueTags.length === 0) {
+            this.elements.tagsFilter.innerHTML = '<span class="empty-state">No tags available</span>';
+        } else {
+            this.elements.tagsFilter.innerHTML = `
+                <button class="filter-btn tag-btn${this.currentTagFilter === 'all' ? ' active' : ''}" data-tag="all">Show All</button>
+            `;
+            uniqueTags.forEach(tag => {
+                const tagBtn = document.createElement('button');
+                tagBtn.className = `filter-btn tag-btn${this.currentTagFilter === tag ? ' active' : ''}`;
+                tagBtn.dataset.tag = tag;
+                tagBtn.textContent = tag;
+                tagBtn.setAttribute('aria-label', `Filter by tag ${tag}`);
+                this.elements.tagsFilter.appendChild(tagBtn);
+            });
+        }
+        this.elements.tagsFilter.classList.toggle('hidden', !this.tagsFilterVisible);
     }
 
     addTask() {
@@ -732,9 +735,7 @@ class TodoApp {
             const hasTag = this.currentTagFilter === 'all' || (taskData && taskData.tags.includes(this.currentTagFilter));
 
             task.style.display = 'none';
-            if (this.currentTagFilter !== 'all' && !hasTag) {
-                return;
-            }
+            if (!hasTag) return;
             switch (this.currentFilter) {
                 case 'all':
                     task.style.display = '';
