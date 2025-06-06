@@ -359,6 +359,8 @@ input[type="date"]:focus,
     padding: 6px 12px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 .sort-group label {
@@ -371,37 +373,54 @@ input[type="date"]:focus,
     white-space: nowrap;
 }
 
-.sort-group label i {
-    color: var(--primary-color);
-    font-size: 0.95rem;
-}
-
 .sort-group select {
     padding: 6px 28px 6px 8px;
-    border: none;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
-    background-color: transparent;
+    background-color: var(--item-bg);
     color: var(--text-color);
     cursor: pointer;
     font-size: 0.9rem;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
     min-width: 120px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.sort-group select:hover {
-    background-color: rgba(99, 102, 241, 0.05);
-}
-
+.sort-group select:hover,
 .sort-group select:focus {
+    border-color: var(--primary-color);
+    background-color: rgba(99, 102, 241, 0.05);
     outline: none;
-    background-color: rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
 }
 
 .dark-mode .sort-group select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%23e5e7eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e5e7eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-color: var(--container-bg);
+    color: var(--text-color);
+}
+
+@media (max-width: 640px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px;
+    }
+    .sort-group {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .sort-group select {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+    }
 }
 
 .filter-buttons {
@@ -447,12 +466,15 @@ input[type="date"]:focus,
 
     .sort-group {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 8px;
+        margin-bottom: 8px;
     }
 
     .sort-group select {
         flex: 1;
         min-width: 0;
+        width: 100%;
     }
 }
 
