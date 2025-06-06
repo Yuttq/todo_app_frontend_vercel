@@ -211,7 +211,6 @@ input[type="date"]:focus,
     justify-content: flex-end;
 }
 
-/* Enhance the select dropdown appearance */
 #task-priority {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -244,7 +243,6 @@ input[type="date"]:focus,
     font-size: 0.95rem;
 }
 
-/* Priority colors in the select dropdown */
 #task-priority option[value="low"] { color: var(--priority-low); }
 #task-priority option[value="medium"] { color: var(--priority-medium); }
 #task-priority option[value="high"] { color: var(--priority-high); }
@@ -1083,7 +1081,6 @@ input[type="checkbox"]:focus {
     }
 }
 
-
 .shortcuts-list {
     display: grid;
     gap: 8px;
@@ -1266,7 +1263,6 @@ input[type="date"]:focus {
     transform: translateY(-1px);
 }
 
-/* Tags display styling */
 .task-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1293,7 +1289,6 @@ input[type="date"]:focus {
     background: var(--primary-hover);
 }
 
-/* Style for tags in the task list */
 .task-meta .task-tags {
     margin-top: 2px;
 }
